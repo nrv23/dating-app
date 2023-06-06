@@ -4,16 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")] // se puede dejar como esta para que tome el nombre de controlador por defecto o asignarle un nombre personalizado
-
-
-    public class UsersController: ControllerBase
+    [Authorize] // una vez que en el archivo program.cs se configura el middleware para autenticacion y autorizacion, se debe poner esta
+    // anotacion en cada clase donde los servicios sean privados, en el nivel de mayor jerarquia para indicar que
+    // todos los servicios de la clase son privados
+    public class UsersController: BaseApiController
     {
         private readonly DataContext context;
 

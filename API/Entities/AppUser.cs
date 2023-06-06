@@ -6,5 +6,7 @@ namespace API.Entities
     {
         public int Id { get; set; } 
         public string UserName { get; set; } // poner como disable la opcion <Nullable>disable</Nullable>  del archivo csproj para evitar el warning de que un sttring no puede ser nulo.
+        public byte[] PasswordHash {get;set;}
+        public byte[] PasswordSalt {get;set;}
     }
 }

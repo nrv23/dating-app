@@ -60,3 +60,11 @@ C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop
 C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\runtimes\win-x64\native\e_sqlite3.dll
 C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\obj\Debug\net7.0\API.csproj.CopyComplete
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
