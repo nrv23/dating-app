@@ -1,4 +1,3 @@
-
 using API.Entities;
 using API.interfaces;
 using Microsoft.IdentityModel.Tokens;
@@ -15,7 +14,6 @@ namespace API.services
         // de los archivos de configuracion
         {
             //setear la llave secreta del firmado del token
-
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
         }
         public string CreateToken(AppUser user)
