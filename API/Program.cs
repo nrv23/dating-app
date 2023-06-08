@@ -1,11 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using API.Data;
-using API.interfaces;
-using API.services;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
 using API.Extensions;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -21,6 +15,9 @@ builder.Services.AddIdentityServices(builder.Configuration);
 // el builder es un contenedor de servicios donde se asigna cualquier servicio que la aplicacion va tener
 var app = builder.Build();
 
+// agregar el middleware para manejo global de exepciones
+
+app.UseMiddleware<ExceptionMiddleware>(); // manejar excepciones globalmente
 app.UseCors(MyAllowSpecificOrigins);
 
 // usar los middlewares para autenticacion y autorizacion
