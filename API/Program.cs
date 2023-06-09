@@ -1,5 +1,8 @@
+using API.Data;
 using API.Extensions;
 using API.Middleware;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -27,4 +30,19 @@ app.UseAuthorization();
 app.MapControllers(); // este metodo es el que maneja las peticiones entrantes y llama los controladores que correspondan a cada 
 // endpoint
 
+// llamar metodo para generar el seed de usuarios
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<DataContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedUsers(context);
+}
+catch (Exception ex) 
+{
+    var logger = services.GetService<ILogger<Program>>();
+    logger.LogError(ex, "Hubo un error en la migracion");
+}
 app.Run();

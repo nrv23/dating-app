@@ -21,6 +21,11 @@ namespace API.Entities
         public  string City {get;set;} 
         public  string Country {get;set;} 
         public List<Photo> Photos {get;set;} = new(); // declara la lista como vacía
+        /*
+
+            Es una relacion de 1 a muchos donde un usuario puede tener muchas fotos. En este caso se crea una llave foranea de idusuario en photo
+            para crear la relacion de un usuario puede tener muchas fotos.
+        */
 
         public int getAge(){
             return DateOfBirth.CalculateAge();
