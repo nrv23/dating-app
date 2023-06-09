@@ -1,7 +1,5 @@
 
 
-using API.Extensions;
-
 namespace API.Entities
 {
     public class AppUser
@@ -27,9 +25,9 @@ namespace API.Entities
             para crear la relacion de un usuario puede tener muchas fotos.
         */
 
-        public int getAge(){
+       /* public int getAge(){
             return DateOfBirth.CalculateAge();
-        }
+        } */
 
     }
 }

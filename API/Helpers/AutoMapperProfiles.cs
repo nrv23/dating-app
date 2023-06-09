@@ -2,6 +2,7 @@
 using API.DTOs;
 using API.Entities;
 using AutoMapper;
+using API.Extensions;
 
 namespace API.Helpers
 {
@@ -15,7 +16,7 @@ namespace API.Helpers
                 se usa el forMember que hace referencia a la propiedad del DTo y map.from hace referencia al dato de la entiedad que va setear la propiedad
                 del DTO
             */
-                .ForMember(des => des.DateOfBirth, opt => opt.MapFrom(src => src.getAge() ))
+                .ForMember(des => des.Age, opt => opt.MapFrom(src => src.DateOfBirth.CalculateAge()))
                 .ForMember(des => des.PhotoUrl,
                      opt => opt.MapFrom(src => 
                         src.Photos.FirstOrDefault(x => x.isMain).Url)); // como Photos es una entidad, debe recorrer esa entidad y fitrar por el isMain
