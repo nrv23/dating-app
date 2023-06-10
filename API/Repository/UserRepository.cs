@@ -34,8 +34,6 @@ namespace API.Repository
         }
 
 
-
-
         // //////////////////////////////////
         public async Task<AppUser> GetUserByIdAsync(int userId)
         {
