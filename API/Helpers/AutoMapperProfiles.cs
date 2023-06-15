@@ -22,6 +22,13 @@ namespace API.Helpers
                         src.Photos.FirstOrDefault(x => x.isMain).Url)); // como Photos es una entidad, debe recorrer esa entidad y fitrar por el isMain
                         // luego obtiene la propiedad Url
             CreateMap<Photo,PhotoDTO>();
+            CreateMap<memberUpdateDto,AppUser>(); //los parametros son source y destination
+
+
+            /*
+                cuando es un get siempre se debe poner como source la entidad y destination el dto
+                cuando es un insert, update se debe poner como sooruce el dto y destino la entidad.
+            */
         }
     }   
 }

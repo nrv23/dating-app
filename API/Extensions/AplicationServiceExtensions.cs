@@ -3,6 +3,7 @@ using API.interfaces;
 using API.Repository;
 using API.services;
 using Microsoft.EntityFrameworkCore;
+using API.Helpers;
 
 namespace API.Extensions
 {
@@ -27,9 +28,14 @@ namespace API.Extensions
             // se agrega un servicio para manejo de token
 
             services.AddScoped<ITokenService, TokenService>();
+
             services.AddScoped<IUserRespository, UserRepository>(); // se debe agregar para que .net cree una instancia
             // habilitar el automapper 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //agregar la configuracion de cloudinary
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+            // agregar el servicio que subir las fotos a cloudinary
+            services.AddScoped<IPhotoService, PhotoService>();
             // agregar el context para cargar el servicio de conexion con la bd 
             services.AddDbContext<Data.DataContext>(opt =>
             {
@@ -38,7 +44,6 @@ namespace API.Extensions
             });
 
             return services;
-
         }
     }
 }
