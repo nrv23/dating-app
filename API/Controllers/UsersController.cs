@@ -56,7 +56,8 @@ namespace API.Controllers
 
         [HttpPost("add-photo")]
 
-        public async Task<ActionResult<PhotoDTO>> AddPhoto(IFormFile file) {
+        public async Task<ActionResult<PhotoDTO>> AddPhoto(IFormFile file)
+        {
 
             var user = await this._userRepository.GetUserByUsernameAsync(User.getUsername());
 
@@ -64,26 +65,49 @@ namespace API.Controllers
 
             var result = await this._photoService.AddPhotoAsync(file);
 
-            if(result.Error != null) return BadRequest(result.Error.Message);
+            if (result.Error != null) return BadRequest(result.Error.Message);
 
-            var photo = new Photo {
-                Url =  result.SecureUrl.AbsoluteUri,
+            var photo = new Photo
+            {
+                Url = result.SecureUrl.AbsoluteUri,
                 PublicId = result.PublicId
             };
 
-            if(user.Photos.Count == 0) photo.isMain = true; // si tiene solo una foto en el perfil
+            if (user.Photos.Count == 0) photo.isMain = true; // si tiene solo una foto en el perfil
 
             user.Photos.Add(photo);
 
-            if(await this._userRepository.SaveAllAsync()) {
-                return CreatedAtAction(nameof(GetMemberByUsername),new {
+            if (await this._userRepository.SaveAllAsync())
+            {
+                return CreatedAtAction(nameof(GetMemberByUsername), new
+                {
                     username = user.UserName
                 }, _mapper.Map<PhotoDTO>(photo));
             }
 
             return BadRequest("Error adding photo");
 
-        }  
+        }
 
+        [HttpPut("set-main-photo/{photoId}")]
+
+        public async Task<ActionResult> setMainPhoto(int photoId)
+        {
+            var user = await this._userRepository.GetUserByUsernameAsync(User.getUsername());
+            if (user == null) return NotFound();
+
+            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+            if(photo == null) return NotFound();
+            if(photo.isMain) return BadRequest("This already your main photo");
+
+            var currentMainPhoto = user.Photos.FirstOrDefault(x => x.isMain);
+            if (currentMainPhoto != null) currentMainPhoto.isMain = false;
+            photo.isMain = true;
+
+            if(await _userRepository.SaveAllAsync()) return NoContent();
+            return BadRequest("Error setting the main photo");
+        }
     }
+
 }
+

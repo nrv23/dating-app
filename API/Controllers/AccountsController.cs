@@ -48,7 +48,8 @@ namespace API.Controllers
 
             await context.SaveChangesAsync();
 
-            return new UserDTO {
+            return new UserDTO
+            {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user)
             };
@@ -58,7 +59,9 @@ namespace API.Controllers
 
         public async Task<ActionResult<UserDTO>> login(LoginDTO data)
         {
-            var user = await context.Users.SingleOrDefaultAsync(x => x.UserName == data.username.ToLower());
+            var user = await context.Users
+                .Include(x => x.Photos) // incluir la entidad relacionada para traer las fotos asociadas a ese usuario.
+                .SingleOrDefaultAsync(x => x.UserName == data.username.ToLower());
             //SingleOrDefaultAsync este metodo debe devolver siempre una fila filtrando por un campo unico. SI devuelve mas de una, lanza una excepcion
             if (user == null) return BadRequest(new
             {
@@ -78,10 +81,12 @@ namespace API.Controllers
                 });
             }
 
-            return new UserDTO {
+            return new UserDTO
+            {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-            };;
+                Token = _tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.isMain)?.Url
+            };
         }
 
         private async Task<bool> UserExists(string username)
