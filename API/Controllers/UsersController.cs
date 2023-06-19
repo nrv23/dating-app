@@ -60,11 +60,9 @@ namespace API.Controllers
         {
 
             var user = await this._userRepository.GetUserByUsernameAsync(User.getUsername());
-
             if (user == null) return NotFound();
 
             var result = await this._photoService.AddPhotoAsync(file);
-
             if (result.Error != null) return BadRequest(result.Error.Message);
 
             var photo = new Photo
@@ -90,7 +88,6 @@ namespace API.Controllers
         }
 
         [HttpPut("set-main-photo/{photoId}")]
-
         public async Task<ActionResult> setMainPhoto(int photoId)
         {
             var user = await this._userRepository.GetUserByUsernameAsync(User.getUsername());
@@ -106,6 +103,26 @@ namespace API.Controllers
 
             if(await _userRepository.SaveAllAsync()) return NoContent();
             return BadRequest("Error setting the main photo");
+        }
+
+        [HttpDelete("delete-photo/{photoId}")]
+        public async Task<ActionResult> delete (int photoId) {
+
+            var user = await this._userRepository.GetUserByUsernameAsync(User.getUsername());
+            if (user == null) return NotFound();
+
+            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+            if(photo == null) return NotFound();
+            if(photo.isMain) return BadRequest("You can not delete your main photo");
+
+            var result = await this._photoService.DeletePhotoAsync(photo.PublicId);
+            if (result.Error != null) return BadRequest(result.Error.Message);
+
+            user.Photos.Remove(photo);
+
+            if(await _userRepository.SaveAllAsync()) return Ok();
+            return BadRequest("Error deleting the main photo");
+
         }
     }
 
