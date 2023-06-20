@@ -29,6 +29,8 @@ namespace API.Helpers
                 cuando es un get siempre se debe poner como source la entidad y destination el dto
                 cuando es un insert, update se debe poner como sooruce el dto y destino la entidad.
             */
+
+            CreateMap<RegisterDTO, AppUser>(); // se crea el mapeo para registrar un nuevo usuario
         }
     }   
 }

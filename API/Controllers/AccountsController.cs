@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.interfaces;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace API.Controllers
 {
@@ -15,8 +16,10 @@ namespace API.Controllers
     {
         private readonly DataContext context;
         private readonly ITokenService _tokenService;
-        public AccountsController(DataContext _context, ITokenService tokenService)
+        private readonly IMapper _mapper;
+        public AccountsController(DataContext _context, ITokenService tokenService, IMapper mapper)
         {
+            this._mapper = mapper;
             this.context = _context;
             this._tokenService = tokenService;
         }
@@ -37,12 +40,11 @@ namespace API.Controllers
             using var hmac = new HMACSHA512();
             // la palabra reservada using lo que hace es que una vez que la instancia de la clase HMACSHA512 no se use mas,
             // va borrarla de la memoria temporal
-            var user = new AppUser
-            {
-                UserName = register.username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.password)),
-                PasswordSalt = hmac.Key // esto lo genera de forma ranmdon
-            };
+
+            var user = this._mapper.Map<AppUser>(register); // convierte automaticamente en una instancia de AppUser
+            user.UserName = register.username.ToLower();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(register.password));
+            user.PasswordSalt = hmac.Key; // esto lo genera de forma ranmdon
 
             context.Users.Add(user);
 
@@ -51,7 +53,8 @@ namespace API.Controllers
             return new UserDTO
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = _tokenService.CreateToken(user),
+                KnownAs = user.KnownAs
             };
         }
 
@@ -85,7 +88,8 @@ namespace API.Controllers
             {
                 Username = user.UserName,
                 Token = _tokenService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.isMain)?.Url
+                PhotoUrl = user.Photos.FirstOrDefault(x => x.isMain)?.Url,
+                KnownAs = user.KnownAs
             };
         }
 
