@@ -5,6 +5,7 @@ using API.DTOs;
 using AutoMapper;
 using API.Extensions;
 using API.Entities;
+using API.Helpers;
 
 namespace API.Controllers
 {
@@ -31,9 +32,22 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<MemberDTO>> GetMembersAsync()
+        //[FromQuery] este indicador lo que esta diciendo es que los parametros vienen de la url 
+        // algo como ?param1=1&param2=2
+        public async Task<ActionResult<PagedList<MemberDTO>>> GetMembersAsync([FromQuery]UserParams userParams)
         {
-            return Ok(await _userRepository.GetMembersAsync());
+
+            var currentUser = await _userRepository.GetUserByUsernameAsync(User.getUsername());
+            userParams.CurrentUser = currentUser.UserName;
+
+            if(string.IsNullOrEmpty(userParams.Gender)) {
+                userParams.Gender = currentUser.Gender == "male"? "female": "male";
+            }
+
+            var users = await _userRepository.GetMembersAsync(userParams);
+            // agregar la cabecera de pagination
+            Response.AddPaginationHeader(new PaginationHeader(users.currentPage, users.PageSize,users.TotalCount, users.TotalPages));
+            return Ok(users);
         }
 
         [HttpPut]

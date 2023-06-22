@@ -5,6 +5,7 @@ using API.services;
 using Microsoft.EntityFrameworkCore;
 using API.Helpers;
 
+
 namespace API.Extensions
 {
     public static class AplicationServiceExtensions
@@ -36,6 +37,8 @@ namespace API.Extensions
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             // agregar el servicio que subir las fotos a cloudinary
             services.AddScoped<IPhotoService, PhotoService>();
+
+            services.AddScoped<LogUserActivity>();
             // agregar el context para cargar el servicio de conexion con la bd 
             services.AddDbContext<Data.DataContext>(opt =>
             {
