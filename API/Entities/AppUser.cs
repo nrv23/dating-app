@@ -24,10 +24,7 @@ namespace API.Entities
             Es una relacion de 1 a muchos donde un usuario puede tener muchas fotos. En este caso se crea una llave foranea de idusuario en photo
             para crear la relacion de un usuario puede tener muchas fotos.
         */
-
-       /* public int getAge(){
-            return DateOfBirth.CalculateAge();
-        } */
-
+        public List<UserLike> LikedbyUsers {get;set;}
+        public List<UserLike> LikedUsers {get;set;}
     }
 }
