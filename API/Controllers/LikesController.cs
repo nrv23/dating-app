@@ -4,9 +4,11 @@ using API.Extensions;
 using API.Entities;
 using API.DTOs;
 using API.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class LikesController : BaseApiController
     {
         private readonly IUserRespository _userRepository;
