@@ -56,7 +56,6 @@ namespace API.Controllers
         {
             messageParams.UserName = User.getUsername();
             var messages = await messageRepository.GetMessagesForUser(messageParams);
-            Console.WriteLine("messages", messages);
             Response.AddPaginationHeader(new PaginationHeader(messages.currentPage, messages.PageSize, messages.TotalCount, messages.TotalPages));
             return messages;
         }
@@ -66,6 +65,29 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<MessageDTO>>> GetMessageThread(string username) {
             var currentUsername = User.getUsername();
             return Ok(await messageRepository.GetMessageThread(currentUsername,username));
+        }
+
+        [HttpDelete("{messageId}")]
+
+        public async Task<ActionResult> deleteMessage(int messageId){
+            var username = User.getUsername();
+            var message = await messageRepository.GetMessage(messageId);
+
+            // comprobar que la persona es quien envia o recibe el mensaje 
+            if( message.RecipientUsername != username 
+                && message.SenderUsername != username) return Unauthorized();
+
+            if(message.RecipientUsername == username) message.RecipientDeleted = true;
+            if(message.SenderUsername == username) message.SenderDeleted = true;
+
+            // si enviado y recibido han elimiado el mensaje, se elimina de la bd
+
+            if(message.RecipientDeleted &&  message.SenderDeleted ) {
+                messageRepository.DeleteMessage(message);
+            }
+
+            if(await messageRepository.SaveAllAsync()) return Ok();
+            return BadRequest("Failed to delete the message");
         }
     }
 }

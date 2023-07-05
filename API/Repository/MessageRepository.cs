@@ -43,9 +43,9 @@ namespace API.Repository
                      .AsQueryable();
             query = messageParams.Container switch
             {
-                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.UserName),
-                "Outbox" => query.Where(u => u.SenderUsername == messageParams.UserName),
-                _ => query.Where(u => u.RecipientUsername == messageParams.UserName && u.DateRead == null)
+                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.UserName && u.RecipientDeleted == false),
+                "Outbox" => query.Where(u => u.SenderUsername == messageParams.UserName  && u.SenderDeleted == false),
+                _ => query.Where(u => u.RecipientUsername == messageParams.UserName && u.RecipientDeleted == false && u.DateRead == null) // los no leidos
             };
 
             var messages = query.ProjectTo<MessageDTO>(mapper.ConfigurationProvider); // mapear la respuesta del query al tipo MessageDTO
@@ -67,7 +67,7 @@ namespace API.Repository
                                 m.Sender.UserName == currentUsername && m.SenderDeleted == false
                             )
                  )
-                 .OrderByDescending(m => m.MessageSent)
+                 .OrderBy(m => m.MessageSent)
                  .ToListAsync();
             // mensajes del usuario actual que no estan leidos
             var unreadMessages = messages.Where(m => m.DateRead == null && m.Recipient.UserName == currentUsername).ToList(); // obtiene los mensajes no leidos del usuario actual
