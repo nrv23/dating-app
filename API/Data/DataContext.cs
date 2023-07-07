@@ -1,10 +1,14 @@
 
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<AppUser, AppRole, int,
+        IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>,
+        IdentityRoleClaim<int>, IdentityUserToken<int>> // indica que el identificador sea de tipo entero para roles y usuarios
     {
         public DataContext(DbContextOptions options) : base(options)
         {
@@ -12,13 +16,29 @@ namespace API.Data
         }
 
         // agregar las entidades que van a ser las tablas de la bd 
-        public DbSet<AppUser> Users { get; set; }
+        // public DbSet<AppUser> Users { get; set; } IdentityDbContext contiene una instancia , que se hereda en el datacontext
         public DbSet<UserLike> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) // usar este metodo para configurar relaciones de muchos a muchos.
         {
             base.OnModelCreating(builder);
+
+            // configurar la relacion de muchos a muhcos entre usuario y role
+
+            builder.Entity<AppUser>()
+                .HasMany(r => r.UserRoles)
+                .WithOne(u => u.User)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+
+            builder.Entity<AppRole>()
+                .HasMany(r => r.UserRoles)
+                .WithOne(u => u.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+
             builder.Entity<UserLike>() // asigna las llaves primarias de la relacion muchos a muchos
                 .HasKey(k => new { k.SourceUserId, k.TargetUserId });
 

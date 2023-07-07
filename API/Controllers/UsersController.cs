@@ -25,12 +25,14 @@ namespace API.Controllers
             _photoService = photoService;
         }
 
+       // [Authorize(Roles ="Member")] 
         [HttpGet("{username}")]
         public async Task<ActionResult<MemberDTO>> GetMemberByUsername(string username)
         {
             return await _userRepository.GetMemberByUsernameAsync(username);
         }
 
+       // [Authorize(Roles ="Admin")] // indicar el tipo de role de usuario que va tener acceso a este servicio
         [HttpGet]
         //[FromQuery] este indicador lo que esta diciendo es que los parametros vienen de la url 
         // algo como ?param1=1&param2=2

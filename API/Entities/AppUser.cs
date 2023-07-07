@@ -1,12 +1,19 @@
 
-
+using Microsoft.AspNetCore.Identity;
 namespace API.Entities
 {
-    public class AppUser
+    public class AppUser: IdentityUser<int>
     {
-        public int Id { get; set; }
-        public string UserName { get; set; } // poner como disable la opcion <Nullable>disable</Nullable>  del archivo csproj para evitar el warning de que un sttring no puede ser nulo.
-        public byte[] PasswordHash { get; set; }
+        /*
+        IdentityUser<int> permite sobreescribir el tipo de dato que tiene el identificador unico. Se sigue usnado el int
+            identityUser tiene estas propiedades
+
+            public int Id { get; set; }
+            public string UserName { get; set; } // poner como disable la opcion <Nullable>disable</Nullable>  del archivo csproj para evitar el warning de que un sttring no puede ser nulo.
+            public byte[] PasswordHash { get; set; }
+
+        Por lo quie son heredadas a esta calse
+        */
         public byte[] PasswordSalt { get; set; }
         public DateOnly DateOfBirth { get; set; } //DateOnly en sql seria tipo date
         public string KnownAs { get; set; } // conocido como
@@ -29,5 +36,6 @@ namespace API.Entities
         // relacion de envio y recibir mensajes 
         public ICollection<Message> MessagesSent { get; set; }
         public ICollection<Message> MessagesReceived { get; set; }
+        public ICollection<AppUserRole> UserRoles {get;set;}
     }
 }
