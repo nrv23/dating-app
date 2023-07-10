@@ -55,7 +55,7 @@ namespace API.Controllers
         {
             var user = await _userManager.Users
                 .Include(x => x.Photos) // incluir la entidad relacionada para traer las fotos asociadas a ese usuario.
-                .SingleOrDefaultAsync(x => x.UserName == data.username.ToLower());
+                .SingleOrDefaultAsync(x => x.UserName.ToLower() == data.username.ToLower());
             //SingleOrDefaultAsync este metodo debe devolver siempre una fila filtrando por un campo unico. SI devuelve mas de una, lanza una excepcion
             if (user == null) return BadRequest(new
             {
