@@ -22,6 +22,7 @@ namespace API.Extensions
                         policy => policy
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
+                                .AllowCredentials()
                                 .WithOrigins("https://localhost:4200")
                     );
             });
@@ -50,6 +51,10 @@ namespace API.Extensions
             });
 
             //services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+
+            // agregar el servicio de signalR
+
+            services.AddSignalR();
 
             return services;
         }

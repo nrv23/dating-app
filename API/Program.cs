@@ -4,7 +4,7 @@ using API.Extensions;
 using API.Middleware;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
+using API.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -33,6 +33,10 @@ app.MapControllers(); // este metodo es el que maneja las peticiones entrantes y
 // endpoint
 
 // llamar metodo para generar el seed de usuarios
+
+// habilitar el endpoint para signalR
+
+app.MapHub<PresenceHub>("hubs/presence");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
