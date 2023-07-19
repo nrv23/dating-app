@@ -34,9 +34,10 @@ app.MapControllers(); // este metodo es el que maneja las peticiones entrantes y
 
 // llamar metodo para generar el seed de usuarios
 
-// habilitar el endpoint para signalR
+// habilitar endpoints para signalR
 
-app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<PresenceHub>("hubs/presence"); // estado activo o no
+app.MapHub<MessageHub>("hubs/message"); // mensajes
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

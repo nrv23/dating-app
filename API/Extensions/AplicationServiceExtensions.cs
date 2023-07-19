@@ -4,7 +4,7 @@ using API.Repository;
 using API.services;
 using Microsoft.EntityFrameworkCore;
 using API.Helpers;
-
+using API.SignalR;
 
 namespace API.Extensions
 {
@@ -55,6 +55,9 @@ namespace API.Extensions
             // agregar el servicio de signalR
 
             services.AddSignalR();
+            // se debe usar el addSingleton porque como es conexion por socket, la conexion se va mantener abierta en ambos lados hasta que la aplicacion se reincie.
+            // por lo quedeve reutilizar la misma instancia del servicio 
+            services.AddSingleton<PresenceTRacker>();
 
             return services;
         }

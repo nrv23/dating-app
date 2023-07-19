@@ -24,7 +24,7 @@ namespace API.Controllers
             this._mapper = mapper;
         }
 
-        [HttpPost]
+       /* [HttpPost]
         public async Task<ActionResult<MessageDTO>> createMessage(CreateMessageDTO createMessage)
         {
 
@@ -49,7 +49,7 @@ namespace API.Controllers
 
             if (await messageRepository.SaveAllAsync()) return Ok(_mapper.Map<MessageDTO>(message));
             return BadRequest("Fail to save message");
-        }
+        } */
 
         [HttpGet]
         public async Task<ActionResult<PagedList<MessageDTO>>> GetMessagesForUser([FromQuery] MessageParams messageParams)        
