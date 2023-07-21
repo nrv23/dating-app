@@ -21,6 +21,8 @@ namespace API.Repository
             this.context = context;
             this.mapper = mapper;
         }
+
+
         public void AddMessage(Message message)
         {
             context.Messages.Add(message);
@@ -36,6 +38,7 @@ namespace API.Repository
             return await context.Messages.FindAsync(id);
         }
 
+
         public async Task<PagedList<MessageDTO>> GetMessagesForUser(MessageParams messageParams)
         {
             var query = context.Messages
@@ -44,7 +47,7 @@ namespace API.Repository
             query = messageParams.Container switch
             {
                 "Inbox" => query.Where(u => u.RecipientUsername == messageParams.UserName && u.RecipientDeleted == false),
-                "Outbox" => query.Where(u => u.SenderUsername == messageParams.UserName  && u.SenderDeleted == false),
+                "Outbox" => query.Where(u => u.SenderUsername == messageParams.UserName && u.SenderDeleted == false),
                 _ => query.Where(u => u.RecipientUsername == messageParams.UserName && u.RecipientDeleted == false && u.DateRead == null) // los no leidos
             };
 
@@ -85,6 +88,32 @@ namespace API.Repository
             return mapper.Map<IEnumerable<MessageDTO>>(messages); // mapea la respuesta a tipo lista MessageDTO y devuelve
         }
 
+
+        // ---------------------------------------------------------------------------------
+
+        public async Task<Connection> GetConnection(string ConnectionId)
+        {
+            return await context.Connections.FindAsync(ConnectionId);
+        }
+
+         public async Task<Group> GetMessageGroup(string groupName)
+        {
+            return await context.Groups
+                .Include(x => x.Connections)
+                .FirstOrDefaultAsync(x => x.Name == groupName);
+        }
+
+        public void RemoveConnection(Connection connection)
+        {
+            context.Connections.Remove(connection);
+        }
+
+        public void AddGroup(Group group)
+        {
+            context.Groups.Add(group);
+        }
+
+        // ----------------------------------------------------------------------------------
         public async Task<bool> SaveAllAsync()
         {
             return await context.SaveChangesAsync() > 0;

@@ -48,6 +48,7 @@ try
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     
     await context.Database.MigrateAsync();
+    await context.Database.ExecuteSqlRawAsync("DELETE FROM [Connections]"); // limpiar las conexiones de signalr cuandp se reinicia el servidor.
     await Seed.SeedUsers(userMansger,roleManager);
 }
 catch (Exception ex) 

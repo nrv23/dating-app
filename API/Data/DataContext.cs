@@ -19,6 +19,8 @@ namespace API.Data
         // public DbSet<AppUser> Users { get; set; } IdentityDbContext contiene una instancia , que se hereda en el datacontext
         public DbSet<UserLike> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Connection> Connections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) // usar este metodo para configurar relaciones de muchos a muchos.
         {
