@@ -22,7 +22,6 @@ namespace API.Repository
             this.mapper = mapper;
         }
 
-
         public void AddMessage(Message message)
         {
             context.Messages.Add(message);
@@ -37,7 +36,6 @@ namespace API.Repository
         {
             return await context.Messages.FindAsync(id);
         }
-
 
         public async Task<PagedList<MessageDTO>> GetMessagesForUser(MessageParams messageParams)
         {
@@ -63,12 +61,12 @@ namespace API.Repository
                  .Include(u => u.Sender).ThenInclude(p => p.Photos)
                  .Include(u => u.Recipient).ThenInclude(p => p.Photos)
                  .Where(m => (
-                                m.Recipient.UserName == currentUsername && m.RecipientDeleted == false
-                                && m.Sender.UserName == recipientUsername
-                            ) || (
-                                m.Recipient.UserName == recipientUsername &&
-                                m.Sender.UserName == currentUsername && m.SenderDeleted == false
-                            )
+                        m.Recipient.UserName == currentUsername && m.RecipientDeleted == false
+                        && m.Sender.UserName == recipientUsername
+                    ) || (
+                        m.Recipient.UserName == recipientUsername &&
+                        m.Sender.UserName == currentUsername && m.SenderDeleted == false
+                    )
                  )
                  .OrderBy(m => m.MessageSent)
                  .ToListAsync();
@@ -96,7 +94,7 @@ namespace API.Repository
             return await context.Connections.FindAsync(ConnectionId);
         }
 
-         public async Task<Group> GetMessageGroup(string groupName)
+        public async Task<Group> GetMessageGroup(string groupName)
         {
             return await context.Groups
                 .Include(x => x.Connections)
@@ -117,6 +115,14 @@ namespace API.Repository
         public async Task<bool> SaveAllAsync()
         {
             return await context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<Group> getGroupForConnection(string connectionId)
+        {
+            return await context.Groups
+                .Include(x => x.Connections)
+                .Where(x => x.Connections.Any(c => c.ConnectionId == connectionId))
+                .FirstOrDefaultAsync();
         }
     }
 }
