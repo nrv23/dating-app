@@ -57,9 +57,7 @@ namespace API.Repository
         public async Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string recipientUsername) //traer los mensajes entre dos usuarios
         {
             // mensajes ya guardados
-            var messages = await context.Messages
-                 .Include(u => u.Sender).ThenInclude(p => p.Photos)
-                 .Include(u => u.Recipient).ThenInclude(p => p.Photos)
+            var query = context.Messages
                  .Where(m => (
                         m.Recipient.UserName == currentUsername && m.RecipientDeleted == false
                         && m.Sender.UserName == recipientUsername
@@ -69,9 +67,9 @@ namespace API.Repository
                     )
                  )
                  .OrderBy(m => m.MessageSent)
-                 .ToListAsync();
+                 .AsQueryable();
             // mensajes del usuario actual que no estan leidos
-            var unreadMessages = messages.Where(m => m.DateRead == null && m.Recipient.UserName == currentUsername).ToList(); // obtiene los mensajes no leidos del usuario actual
+            var unreadMessages = query.Where(m => m.DateRead == null && m.Recipient.UserName == currentUsername).ToList(); // obtiene los mensajes no leidos del usuario actual
 
             if (unreadMessages.Any()) // pregunta si hay mensajes sin leer
             {
@@ -80,10 +78,11 @@ namespace API.Repository
                     message.DateRead = DateTime.Now; // marca la fecha del mensaje leido
                 }
 
-                await context.SaveChangesAsync(); // gvuarda los cambios en la bd
+                //await context.SaveChangesAsync(); // gvuarda los cambios en la bd
             }
 
-            return mapper.Map<IEnumerable<MessageDTO>>(messages); // mapea la respuesta a tipo lista MessageDTO y devuelve
+            //return mapper.Map<IEnumerable<MessageDTO>>(messages); // mapea la respuesta a tipo lista MessageDTO y devuelve
+            return await query.ProjectTo<MessageDTO>(mapper.ConfigurationProvider).ToListAsync();
         }
 
 
@@ -111,11 +110,7 @@ namespace API.Repository
             context.Groups.Add(group);
         }
 
-        // ----------------------------------------------------------------------------------
-        public async Task<bool> SaveAllAsync()
-        {
-            return await context.SaveChangesAsync() > 0;
-        }
+        // ---------------------------------------------------------------------------------
 
         public async Task<Group> getGroupForConnection(string connectionId)
         {

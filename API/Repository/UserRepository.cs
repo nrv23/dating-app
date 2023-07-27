@@ -36,15 +36,16 @@ namespace API.Repository
             var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge - 1));
             var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge - 1));
 
-            Console.WriteLine("edad",maxDob);
+            Console.WriteLine("edad", maxDob);
             Console.WriteLine("tanaño de pagina".Concat(userParams.PageSize.ToString()));
 
-            query = query.Where( u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
+            query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
 
             // ordenar la consulta
 
-            query = userParams.OrderBy switch {
-                "created" => query.OrderByDescending( x => x.Created),
+            query = userParams.OrderBy switch
+            {
+                "created" => query.OrderByDescending(x => x.Created),
                 _ => query.OrderByDescending(u => u.LastActive) // ordernamiento por default
             };
 
@@ -77,15 +78,15 @@ namespace API.Repository
                 .Include(p => p.Photos)
                 .ToListAsync();
         }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0; // esto indica si las transacciones se ejecutaron bine.
-        }
-
         public void Update(AppUser user)
         {
             _context.Entry(user).State = EntityState.Modified; // se usa para indicar que una entidad a tenido una actualizacion
+        }
+
+        public async Task<string> GetUserGender(string username)
+        {
+            return await _context.Users.Where(x => x.UserName == username)
+            .Select(x => x.Gender).FirstOrDefaultAsync(); // selecciona solo el genero
         }
     }
 }
