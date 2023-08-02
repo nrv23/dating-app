@@ -79,3 +79,4 @@ C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop
 C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+C:\Users\Nataniel Rodriguez\OneDrive - Grupo de Comunicacion Garnier S.A\Desktop\tinder-app\API\API\bin\Debug\net7.0\API.staticwebassets.runtime.json

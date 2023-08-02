@@ -29,6 +29,13 @@ app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 // Configure the HTTP request pipeline.
+
+
+// configurar que .net sirva archivos estaticos 
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+// ---------------------------------
 app.MapControllers(); // este metodo es el que maneja las peticiones entrantes y llama los controladores que correspondan a cada 
 // endpoint
 
@@ -38,6 +45,7 @@ app.MapControllers(); // este metodo es el que maneja las peticiones entrantes y
 
 app.MapHub<PresenceHub>("hubs/presence"); // estado activo o no
 app.MapHub<MessageHub>("hubs/message"); // mensajes
+app.MapFallbackToController("Index","Fallback");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
